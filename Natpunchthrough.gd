@@ -11,18 +11,20 @@ var own_port = 0
 var inputted_room_code = ""
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	server_udp.connect_to_host(rendevous_ip,rendevous_port)
+	
 	var _json_data = {
 	  "code":"UDPCONNECT",
 	  "client_id":0
 	}
 	send_packet_to_rendevous(_json_data)
 	
-
+	
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
+	
+	print(multiplayer.multiplayer_peer.get_connection_status())
 	if server_udp.get_available_packet_count() > 0:
 		var data_stream = ""
 		var start_stream = false
@@ -91,24 +93,25 @@ func receive_packet(json):
 				"GREETING":"GREETING"
 			}
 			send_packet_to_peer(json_data,json.host_info.address,json.host_info.port)
+			
 			var game_packet_peer = ENetMultiplayerPeer.new()
 			var error = game_packet_peer.create_client(json.host_info.address,json.host_info.port)
 			if error:
 				return(error)
 				
 			multiplayer.multiplayer_peer = game_packet_peer
-			test_rpc.rpc()
 			
 			
 			
 
 func send_packet_to_rendevous(json):
 	var _data = JSON.stringify(json)
+	server_udp.set_dest_address(rendevous_ip,rendevous_port)
 	server_udp.put_packet(("XSTART" + _data + "XENDX" ).to_utf8_buffer())
 
 func send_packet_to_peer(json,ip,port):
 	var _data = JSON.stringify(json)
-	peer_udp.connect_to_host(ip,port)
+	peer_udp.set_dest_address(ip,port)
 	peer_udp.put_packet(("XSTART" + _data + "XENDX" ).to_utf8_buffer())
 
 	
