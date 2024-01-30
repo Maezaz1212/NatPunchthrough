@@ -2,7 +2,6 @@ extends Node
 
 var server_udp = PacketPeerUDP.new()
 var peer_udp = PacketPeerUDP.new()
-var game_packet_peer = ENetMultiplayerPeer.new();
 var client_id = 0
 var own_port = 0
 
@@ -18,6 +17,8 @@ func _ready():
 	  "client_id":0
 	}
 	send_packet_to_rendevous(_json_data)
+	
+
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -69,16 +70,15 @@ func receive_packet(json):
 		"UDP_CONNECT_SUCCESS":
 			client_id = json.client_id
 			own_port = json.socket_info.port
-			peer_udp.bind(own_port)
 			
 		"HOST_SUCCESS":
 			print("host success:" + json.room_code + " " + client_id)
-			game_packet_peer = ENetMultiplayerPeer.new()
+			var game_packet_peer = ENetMultiplayerPeer.new()
 			var error = game_packet_peer.create_server(own_port)
 			if error:
-				print(error)
+				return(error)
 			multiplayer.multiplayer_peer = game_packet_peer
-			test_rpc().rpc()
+			test_rpc.rpc()
 			
 		"PLAYER_JOINED":
 			var json_data = {
@@ -91,13 +91,13 @@ func receive_packet(json):
 				"GREETING":"GREETING"
 			}
 			send_packet_to_peer(json_data,json.host_info.address,json.host_info.port)
-			game_packet_peer = ENetMultiplayerPeer.new()
+			var game_packet_peer = ENetMultiplayerPeer.new()
 			var error = game_packet_peer.create_client(json.host_info.address,json.host_info.port)
 			if error:
-				print(error)
+				return(error)
 				
 			multiplayer.multiplayer_peer = game_packet_peer
-			test_rpc().rpc()
+			test_rpc.rpc()
 			
 			
 			
@@ -107,7 +107,6 @@ func send_packet_to_rendevous(json):
 	server_udp.put_packet(("XSTART" + _data + "XENDX" ).to_utf8_buffer())
 
 func send_packet_to_peer(json,ip,port):
-	print("here")
 	var _data = JSON.stringify(json)
 	peer_udp.connect_to_host(ip,port)
 	peer_udp.put_packet(("XSTART" + _data + "XENDX" ).to_utf8_buffer())
@@ -142,6 +141,6 @@ func join():
 	}
 	send_packet_to_rendevous(json_data)
 	
-@rpc("any_peer","call_remote","unreliable")
+@rpc("any_peer","call_local","unreliable")
 func test_rpc():
 	print("CONNECTED")
