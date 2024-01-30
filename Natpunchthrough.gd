@@ -74,8 +74,11 @@ func receive_packet(json):
 		"HOST_SUCCESS":
 			print("host success:" + json.room_code + " " + client_id)
 			game_packet_peer = ENetMultiplayerPeer.new()
-			game_packet_peer.create_server(own_port)
+			var error = game_packet_peer.create_server(own_port)
+			if error:
+				print(error)
 			multiplayer.multiplayer_peer = game_packet_peer
+			test_rpc().rpc()
 			
 		"PLAYER_JOINED":
 			var json_data = {
@@ -89,7 +92,12 @@ func receive_packet(json):
 			}
 			send_packet_to_peer(json_data,json.host_info.address,json.host_info.port)
 			game_packet_peer = ENetMultiplayerPeer.new()
-			game_packet_peer.create_client(json.host_info.address,json.host_info.port)
+			var error = game_packet_peer.create_client(json.host_info.address,json.host_info.port)
+			if error:
+				print(error)
+				
+			multiplayer.multiplayer_peer = game_packet_peer
+			test_rpc().rpc()
 			
 			
 			
@@ -133,3 +141,7 @@ func join():
 		"room_code":inputted_room_code,
 	}
 	send_packet_to_rendevous(json_data)
+	
+@rpc("any_peer","call_remote","unreliable")
+func test_rpc():
+	print("CONNECTED")
