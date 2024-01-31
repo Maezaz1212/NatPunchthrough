@@ -5,7 +5,7 @@ var peer_udp = PacketPeerUDP.new()
 var client_id = 0
 var own_port = 0
 
-@export var rendevous_ip = "127.0.0.1" 
+@export var rendevous_ip = "13.239.59.107" 
 @export var rendevous_port = 3000;
 
 var inputted_room_code = ""
@@ -16,6 +16,7 @@ func _ready():
 	  "code":"UDPCONNECT",
 	  "client_id":0
 	}
+	
 	send_packet_to_rendevous(_json_data)
 	
 	
@@ -24,7 +25,6 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	
-	print(multiplayer.multiplayer_peer.get_connection_status())
 	if server_udp.get_available_packet_count() > 0:
 		var data_stream = ""
 		var start_stream = false
@@ -84,13 +84,13 @@ func receive_packet(json):
 			
 		"PLAYER_JOINED":
 			var json_data = {
-				"GREETING":"GREETING"
+				"code":"GREETING"
 			}
 			send_packet_to_peer(json_data,json.player_info.address,json.player_info.port)
 		
 		"JOIN_SUCCESS":
 			var json_data = {
-				"GREETING":"GREETING"
+				"code":"GREETING"
 			}
 			send_packet_to_peer(json_data,json.host_info.address,json.host_info.port)
 			

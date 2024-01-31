@@ -1,9 +1,9 @@
 [gd_scene load_steps=2 format=3 uid="uid://dlgmqilr5i5k5"]
 
-[ext_resource type="Script" path="res://Natpunchthrough.gd" id="1_ddu0j"]
+[ext_resource type="Script" path="res://Lobby.gd" id="1_dcmgc"]
 
 [node name="Lobby" type="Node2D"]
-script = ExtResource("1_ddu0j")
+script = ExtResource("1_dcmgc")
 
 [node name="Control" type="Control" parent="."]
 layout_mode = 3
@@ -55,6 +55,16 @@ offset_bottom = 63.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[connection signal="button_down" from="Control/HOST" to="." method="_on_button_button_down"]
+[node name="START GAME" type="Button" parent="Control"]
+layout_mode = 0
+offset_left = 532.0
+offset_top = 397.0
+offset_right = 638.0
+offset_bottom = 428.0
+text = "START GAME
+"
+
+[connection signal="button_down" from="Control/HOST" to="." method="_on_host_button_down"]
 [connection signal="button_down" from="Control/JOIN" to="." method="_on_join_button_down"]
 [connection signal="text_changed" from="Control/LineEdit" to="." method="_on_line_edit_text_changed"]
+[connection signal="button_down" from="Control/START GAME" to="." method="_on_start_game_button_down"]
