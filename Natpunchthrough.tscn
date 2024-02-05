@@ -1,6 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://d1501x5kovh45"]
-
-[ext_resource type="Script" path="res://Natpunchthrough.gd" id="1_xor05"]
-
-[node name="Natpunchtrhough" type="Node"]
-script = ExtResource("1_xor05")
