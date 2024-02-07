@@ -15,8 +15,7 @@ var is_local_player = false
 @export var move_dir = Vector2.ZERO
 var parent;
 
-@rpc("any_peer","call_local","reliable")
-func set_connectionsRPC():
+func _ready():
 	parent = get_parent()
 	parent.MoveAxisChangedSignal.connect(onMoveAxisChange)
 	parent.LookAxisChangedSignal.connect(onLookAxisChange)

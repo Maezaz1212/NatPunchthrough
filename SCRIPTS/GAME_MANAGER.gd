@@ -36,7 +36,6 @@ func on_game_start():
 	var puppet_master_keyboard = spawn_object("res://SCENES/Puppet_Master.tscn",Vector2.ZERO,0)
 	puppet_master_keyboard.owner_id = multiplayer.get_unique_id()
 	puppet_master_keyboard.controller = false;
-	Relayconnect.call_rpc_room(puppet_master_keyboard.set_connectionsRPC,[])
 	for controller_id in Input.get_connected_joypads():
 		add_controller_puppet_master(controller_id)
 	
@@ -81,6 +80,7 @@ func spawn_object(object_path : String,pos : Vector2,rot : float,parent_id : Str
 	object_instance.global_position = pos
 	object_instance.global_rotation_degrees = rot
 	object_instance.sync_id = object_id
+	object_instance.name = object_id
 	 
 	objects_to_sync[object_id] = object_instance
 	Relayconnect.call_rpc_room(spawn_object_rpc,[object_path,pos,rot,object_id,parent_id],false)
@@ -99,6 +99,7 @@ func spawn_object_rpc(object_path : String,pos : Vector2,rot : float,object_id :
 	object_instance.global_position = pos
 	object_instance.global_rotation_degrees = rot
 	object_instance.sync_id = object_id
+	object_instance.name = object_id
 	objects_to_sync[object_id] = object_instance
 
 ## OBJECT SYNCING
