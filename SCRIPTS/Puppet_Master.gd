@@ -134,9 +134,10 @@ func MoveAxisChanged(new_move_axis : Vector2):
 	
 @rpc("any_peer","call_remote","reliable")
 func MoveAxisChangedRPC(new_move_axis):
-	print("HERE")
+
 	if is_local_player:
 		return
+	print("HERE")
 	MoveAxis = new_move_axis
 	
 func LookAxisChanged(new_look_axis):

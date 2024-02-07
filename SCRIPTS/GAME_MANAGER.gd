@@ -36,7 +36,7 @@ func on_game_start():
 	var puppet_master_keyboard = spawn_object("res://SCENES/Puppet_Master.tscn",Vector2.ZERO,0)
 	puppet_master_keyboard.owner_id = multiplayer.get_unique_id()
 	puppet_master_keyboard.controller = false;
-	
+	Relayconnect.call_rpc_room(puppet_master_keyboard.set_connectionsRPC,[])
 	for controller_id in Input.get_connected_joypads():
 		add_controller_puppet_master(controller_id)
 	

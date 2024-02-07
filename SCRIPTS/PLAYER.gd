@@ -15,9 +15,9 @@ var is_local_player = false
 @export var move_dir = Vector2.ZERO
 var parent;
 
-func _ready():
+@rpc("any_peer","call_local","reliable")
+func set_connectionsRPC():
 	parent = get_parent()
-	print(parent)
 	parent.MoveAxisChangedSignal.connect(onMoveAxisChange)
 	parent.LookAxisChangedSignal.connect(onLookAxisChange)
 	parent.MousePositionChangeSignal.connect(onMousePositionChange)
@@ -51,6 +51,7 @@ func set_speed(new_speed : int):
 	Speed = new_speed
 		
 func onMoveAxisChange(new_move_axis):
+	print("here")
 	move_dir = new_move_axis;
 
 func onLookAxisChange(new_look_axis):
