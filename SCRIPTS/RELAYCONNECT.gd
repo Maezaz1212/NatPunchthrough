@@ -7,10 +7,10 @@ signal HOST_SUCCESS
 signal HOST_FAIL(error_message)
 
 @export var typed_room_code= ""
-var ROOM_DATA = {}
-var IS_HOST = false;
-
-var CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+var ROOM_DATA := {}
+var IS_HOST := false;
+var HOST_ID := 0;
+var CHARS := "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
 
 ## Supplementary functions	
 # Called when the node enters the scene tree for the first time.
@@ -42,7 +42,8 @@ func host_rpc():
 
 @rpc("authority","call_remote","reliable")
 func host_success_rpc(room_code : String,room_info : Dictionary):
-	print(room_info)
+	ROOM_DATA = room_info
+	HOST_ID = ROOM_DATA.host_id
 	IS_HOST = true
 	HOST_SUCCESS.emit()
 	
@@ -55,7 +56,9 @@ func join_rpc(room_code : String):
 	pass
 
 @rpc("authority","call_remote","reliable")
-func join_success_rpc(room_code : String):
+func join_success_rpc(room_code : String,room_info : Dictionary):
+	ROOM_DATA = room_info
+	HOST_ID = ROOM_DATA.host_id
 	JOIN_SUCCESS.emit()
 	pass
 
@@ -72,6 +75,7 @@ func _resgister_player():
 @rpc("authority","reliable")
 func sync_room_data_rpc(room_data : Dictionary):
 	ROOM_DATA = room_data
+	HOST_ID = ROOM_DATA.host_id
 	print(ROOM_DATA)
 
 func call_rpc_room(rpc_function : Callable, args : Array, call_self : bool = true):
@@ -91,6 +95,10 @@ func call_rpc_room(rpc_function : Callable, args : Array, call_self : bool = tru
 				rpc_function.rpc_id(player_id,args[0],args[1],args[2])
 			4:
 				rpc_function.rpc_id(player_id,args[0],args[1],args[2],args[3])
+			5:
+				rpc_function.rpc_id(player_id,args[0],args[1],args[2],args[3],args[4])
+			6:
+				rpc_function.rpc_id(player_id,args[0],args[1],args[2],args[3],args[4],args[5])
 		
 	
 
