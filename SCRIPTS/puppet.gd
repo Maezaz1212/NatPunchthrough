@@ -8,6 +8,7 @@ func _ready():
 	parent.MoveAxisChangedSignal.connect(onMoveAxisChange)
 	parent.LookAxisChangedSignal.connect(onLookAxisChange)
 	parent.MousePositionChangeSignal.connect(onMousePositionChange)
+
 func onMoveAxisChange(new_move_axis):
 	print("MOVED")
 

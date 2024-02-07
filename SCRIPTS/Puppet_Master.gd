@@ -124,14 +124,19 @@ func MoveAxisChanged(new_move_axis : Vector2):
 	MoveAxis = new_move_axis
 	if MoveAxis.is_zero_approx():
 		MoveAxis = Vector2.ZERO
+		
+	MoveAxisChangedSignal.emit(MoveAxis)
 	
 	if is_local_player:
 		Relayconnect.call_rpc_room(MoveAxisChangedRPC,[MoveAxis],false)
 		
-	MoveAxisChangedSignal.emit(MoveAxis)
 	
-@rpc("any_peer","call_remote","unreliable")
+	
+@rpc("any_peer","call_remote","reliable")
 func MoveAxisChangedRPC(new_move_axis):
+	print("HERE")
+	if is_local_player:
+		return
 	MoveAxis = new_move_axis
 	
 func LookAxisChanged(new_look_axis):
@@ -157,5 +162,8 @@ func onOwnerIdChangeRPC(new_owner_id):
 	owner_id = new_owner_id
 
 		
-		
+@rpc("any_peer","call_local","reliable")
+func DestroySelf():
+	GameManager.objects_to_sync.erase(sync_id)
+	queue_free()
 

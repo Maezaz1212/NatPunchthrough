@@ -27,7 +27,7 @@ func _ready():
 func  _process(delta):
 	if Game_started and Relayconnect.IS_HOST:
 		sync_all_objects_pos()
-		
+	pass	
 # START GAME AND SPAWN PLAYERS
 func on_game_start():
 	var pos = Vector2(randi_range(300,600),-300)
@@ -55,7 +55,7 @@ func add_controller_puppet_master(new_device_id):
 
 func remove_controller_puppet_master(device_id):
 	controller_puppet_masters[device_id].DestroySelf()
-	controller_puppet_masters[device_id] = null
+	controller_puppet_masters.erase(device_id)
 	
 func on_joy_connection_changed(device_id : int,connected : bool):
 	if !Game_started:
