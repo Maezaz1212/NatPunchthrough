@@ -79,8 +79,9 @@ func _process(delta):
 		return
 	
 	var new_dictionary_reliable := {}
+	var new_dictionary_unreliable := {}
 	var something_different_reliable := false
-
+	var something_different_unreliable := false
 	
 	for key in reliable_vars_to_sync:
 		new_dictionary_reliable[key] = {}
@@ -91,12 +92,21 @@ func _process(delta):
 				new_dictionary_reliable[key][variable] = new_value
 				something_different_reliable = true
 	
-
+	for key in unreliable_vars_to_sync:
+		new_dictionary_unreliable[key] = {}
+		for variable in unreliable_vars_to_sync[key]:
+			var new_value = node_array[key].get(variable)
+			if prior_value_dictionary_unreliable[key][variable] != new_value:
+				prior_value_dictionary_unreliable[key][variable] = new_value
+				new_dictionary_unreliable[key][variable] = new_value
+				
+				something_different_unreliable = true	
 	
 	if something_different_reliable:
 		Relayconnect.call_rpc_room(reliable_sync,[new_dictionary_reliable],false)
 	
-	Relayconnect.call_rpc_room(unreliable_sync,[unreliable_vars_to_sync],false)
+	
+	Relayconnect.call_rpc_room(unreliable_sync,[prior_value_dictionary_unreliable],false)
 	
 @rpc("any_peer","call_remote","reliable")
 func on_spawn_sync():
@@ -115,6 +125,7 @@ func reliable_sync(sync_dict : Dictionary):
 @rpc("any_peer","call_remote","unreliable_ordered")
 func unreliable_sync(sync_dict : Dictionary):
 	for key in sync_dict:
+		print(sync_dict[key])
 		for variable in sync_dict[key]:
 			var node := node_array[key] as Node2D
 			match variable:

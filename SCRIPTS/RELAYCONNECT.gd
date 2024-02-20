@@ -19,7 +19,7 @@ var CHARS := "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	var relay_connect = ENetMultiplayerPeer.new()
-	var error = relay_connect.create_client("127.0.0.1",25566)
+	var error = relay_connect.create_client("192.168.68.71",25566)
 	if error:
 		return(error)
 		
