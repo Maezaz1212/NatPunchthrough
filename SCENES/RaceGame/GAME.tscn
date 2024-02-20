@@ -1,0 +1,182 @@
+[gd_scene load_steps=17 format=3 uid="uid://hd6wc68o7osy"]
+
+[ext_resource type="Script" path="res://SCRIPTS/Game_Room.gd" id="1_lue75"]
+[ext_resource type="Texture2D" uid="uid://c1l4tcbtavjpl" path="res://ASSETS/Solid_white.png" id="2_vl1qh"]
+[ext_resource type="PackedScene" uid="uid://igx155esedds" path="res://SCENES/NETWORKING/network_var_sync.tscn" id="3_xwpkr"]
+[ext_resource type="Script" path="res://SCENES/RaceGame/PlayerStartArea.gd" id="4_4ue7r"]
+[ext_resource type="Texture2D" uid="uid://c2okxybv000jq" path="res://ASSETS/transparent_white.png" id="4_8k6fy"]
+[ext_resource type="Script" path="res://SCRIPTS/WALLOFDEATH.gd" id="5_gnxqn"]
+[ext_resource type="Script" path="res://SCRIPTS/RaceCamera.gd" id="6_iaqfd"]
+[ext_resource type="Script" path="res://SCENES/RaceGame/finish_line.gd" id="7_sku0x"]
+[ext_resource type="Script" path="res://SCENES/RaceGame/RoomCodeDisplay.gd" id="9_k2brk"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_allfg"]
+size = Vector2(600, 20)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_522k5"]
+size = Vector2(20, 187)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_8xlv8"]
+size = Vector2(126, 118)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hsjdx"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hysj1"]
+size = Vector2(679, 20)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_idjkw"]
+size = Vector2(63, 189)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_f8aet"]
+size = Vector2(196, 850)
+
+[node name="GAME" type="Node2D" node_paths=PackedStringArray("textLabel", "WALLOFDEATH", "DOOR", "Game_message")]
+script = ExtResource("1_lue75")
+textLabel = NodePath("PlayerStartArea/RichTextLabel")
+WALLOFDEATH = NodePath("WALLOFDEATH")
+DOOR = NodePath("DOOR")
+Game_message = NodePath("WALLOFDEATH/GameMessage")
+
+[node name="LobbyGround" type="StaticBody2D" parent="."]
+position = Vector2(557.705, 500)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LobbyGround"]
+position = Vector2(6.29498, 1)
+shape = SubResource("RectangleShape2D_allfg")
+
+[node name="Sprite2D" type="Sprite2D" parent="LobbyGround"]
+position = Vector2(-0.20504, 1)
+scale = Vector2(2.935, 0.1)
+texture = ExtResource("2_vl1qh")
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Leave Button" type="Button" parent="Control"]
+layout_mode = 0
+offset_left = 820.0
+offset_top = 551.0
+offset_right = 876.0
+offset_bottom = 582.0
+text = "LEAVE"
+
+[node name="DOOR" type="StaticBody2D" parent="."]
+position = Vector2(851, 501)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DOOR"]
+position = Vector2(-1, -83.5)
+shape = SubResource("RectangleShape2D_522k5")
+
+[node name="Sprite2D" type="Sprite2D" parent="DOOR"]
+position = Vector2(-0.999977, -83.5)
+scale = Vector2(0.1175, 0.945)
+texture = ExtResource("2_vl1qh")
+
+[node name="NetworkVarSync" parent="DOOR" instance=ExtResource("3_xwpkr")]
+unreliable_sync_vars = {
+NodePath(".."): ["global_position"]
+}
+
+[node name="PlayerStartArea" type="Area2D" parent="." node_paths=PackedStringArray("textLabel")]
+position = Vector2(795, 449)
+script = ExtResource("4_4ue7r")
+textLabel = NodePath("RichTextLabel")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerStartArea"]
+position = Vector2(-26, -26)
+shape = SubResource("RectangleShape2D_8xlv8")
+
+[node name="RichTextLabel" type="RichTextLabel" parent="PlayerStartArea"]
+offset_left = -87.0
+offset_top = -79.0
+offset_right = 41.0
+offset_bottom = -50.0
+text = "HELLLo
+"
+fit_content = true
+
+[node name="Sprite2D" type="Sprite2D" parent="PlayerStartArea"]
+material = SubResource("ShaderMaterial_hsjdx")
+position = Vector2(-23.5, -18.5)
+scale = Vector2(0.675, 0.665)
+texture = ExtResource("4_8k6fy")
+
+[node name="NetworkVarSync" parent="PlayerStartArea" instance=ExtResource("3_xwpkr")]
+reliable_sync_vars = {
+NodePath("../RichTextLabel"): ["text"]
+}
+
+[node name="RUN_LEVEL" type="Node2D" parent="."]
+
+[node name="StaticBody2D" type="StaticBody2D" parent="RUN_LEVEL"]
+position = Vector2(1196, 500)
+
+[node name="Sprite2D" type="Sprite2D" parent="RUN_LEVEL/StaticBody2D"]
+scale = Vector2(3.385, 0.11)
+texture = ExtResource("2_vl1qh")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RUN_LEVEL/StaticBody2D"]
+position = Vector2(-2.5, 0)
+shape = SubResource("RectangleShape2D_hysj1")
+
+[node name="FINISHLine" type="Area2D" parent="."]
+position = Vector2(1518, 504)
+script = ExtResource("7_sku0x")
+
+[node name="Sprite2D" type="Sprite2D" parent="FINISHLine"]
+position = Vector2(-22.4999, -113)
+scale = Vector2(0.315, 0.99)
+texture = ExtResource("4_8k6fy")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="FINISHLine"]
+position = Vector2(-22.5, -116.5)
+shape = SubResource("RectangleShape2D_idjkw")
+
+[node name="WALLOFDEATH" type="Area2D" parent="."]
+script = ExtResource("5_gnxqn")
+
+[node name="Sprite2D" type="Sprite2D" parent="WALLOFDEATH"]
+position = Vector2(0, 324.5)
+scale = Vector2(1, 4.245)
+texture = ExtResource("2_vl1qh")
+
+[node name="Camera2D" type="Camera2D" parent="WALLOFDEATH"]
+position = Vector2(550, 324.5)
+scale = Vector2(1, 4.245)
+offset = Vector2(29.67, 0)
+script = ExtResource("6_iaqfd")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WALLOFDEATH"]
+position = Vector2(0, 327)
+shape = SubResource("RectangleShape2D_f8aet")
+
+[node name="GameMessage" type="RichTextLabel" parent="WALLOFDEATH"]
+offset_left = 457.0
+offset_top = 308.0
+offset_right = 922.0
+offset_bottom = 348.0
+
+[node name="NetworkVarSync" parent="WALLOFDEATH" instance=ExtResource("3_xwpkr")]
+reliable_sync_vars = {
+NodePath(".."): ["velocity"]
+}
+unreliable_sync_vars = {
+NodePath(".."): ["global_position"]
+}
+
+[node name="RoomCodeDisplay" type="RichTextLabel" parent="."]
+offset_left = 268.0
+offset_top = 173.0
+offset_right = 485.0
+offset_bottom = 213.0
+text = "ROOM CODE : "
+script = ExtResource("9_k2brk")
+
+[connection signal="button_down" from="Control/Leave Button" to="." method="_on_leave_button_button_down"]
+[connection signal="body_entered" from="PlayerStartArea" to="PlayerStartArea" method="_on_body_entered"]
+[connection signal="body_exited" from="PlayerStartArea" to="PlayerStartArea" method="_on_body_exited"]
+[connection signal="body_entered" from="FINISHLine" to="FINISHLine" method="_on_body_entered"]
+[connection signal="body_entered" from="WALLOFDEATH" to="WALLOFDEATH" method="_on_body_entered"]

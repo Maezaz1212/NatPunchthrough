@@ -1,15 +1,18 @@
 extends Node2D
 
-
+@export var JOIN_BUTTON : Button
+@export var HOST_BUTTON : Button
+@export var MessageLabel : RichTextLabel
 func _ready():
 	Relayconnect.JOIN_SUCCESS.connect(_on_join_success)
 	Relayconnect.JOIN_FAIL.connect(_on_join_fail)
 	Relayconnect.HOST_SUCCESS.connect(_on_host_success)
 	Relayconnect.HOST_FAIL.connect(_on_host_fail)
+	Relayconnect.ON_RELAY_SERVER_FAIL.connect(_on_relay_server_fail)
+	Relayconnect.ON_RELAY_SERVER_CONNECT.connect(_on_relay_server_connect)
 	
 func _on_host_success():
-	
-	print("HOST SUCESS")
+	Relayconnect.call_rpc_room(GameManager.change_scene_rpc,["res://SCENES/RaceGame/GAME.tscn"])
 
 func _on_host_fail():
 	print("HOST FAIL")
@@ -20,19 +23,24 @@ func _on_join_success():
 func _on_join_fail(error_message):
 	print(error_message)
 	print("JOIN FAIL")
-	
+
+func _on_relay_server_connect():
+	MessageLabel.text = ""
+	JOIN_BUTTON.disabled = false
+	HOST_BUTTON.disabled = false
+
+func _on_relay_server_fail():
+	MessageLabel.text = "CONNECTION TO RELAY SERVER FAILED"
+
 func _on_host_button_down():
 	Relayconnect.host()
-
 
 func _on_join_button_down():
 	Relayconnect.join()
 	
-
-
 func _on_line_edit_text_changed(new_text):
 	Relayconnect.typed_room_code = new_text
 
 
-func _on_start_game_button_down():
-	Relayconnect.call_rpc_room(GameManager.change_scene_rpc,["res://SCENES/GAME.tscn"])
+
+	

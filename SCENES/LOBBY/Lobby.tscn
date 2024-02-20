@@ -1,9 +1,12 @@
 [gd_scene load_steps=2 format=3 uid="uid://dlgmqilr5i5k5"]
 
-[ext_resource type="Script" path="res://SCRIPTS/Lobby.gd" id="1_i5djm"]
+[ext_resource type="Script" path="res://SCRIPTS/Lobby.gd" id="1_7x71h"]
 
-[node name="Lobby" type="Node2D"]
-script = ExtResource("1_i5djm")
+[node name="Lobby" type="Node2D" node_paths=PackedStringArray("JOIN_BUTTON", "HOST_BUTTON", "MessageLabel")]
+script = ExtResource("1_7x71h")
+JOIN_BUTTON = NodePath("Control/JOIN")
+HOST_BUTTON = NodePath("Control/HOST")
+MessageLabel = NodePath("Control/RichTextLabel")
 
 [node name="Control" type="Control" parent="."]
 layout_mode = 3
@@ -24,6 +27,7 @@ offset_right = 22.5
 offset_bottom = -27.0
 grow_horizontal = 2
 grow_vertical = 2
+disabled = true
 text = "HOST"
 
 [node name="JOIN" type="Button" parent="Control"]
@@ -39,6 +43,7 @@ offset_right = 21.5
 offset_bottom = 15.5
 grow_horizontal = 2
 grow_vertical = 2
+disabled = true
 text = "JOIN"
 
 [node name="LineEdit" type="LineEdit" parent="Control"]
@@ -55,16 +60,14 @@ offset_bottom = 63.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="START GAME" type="Button" parent="Control"]
+[node name="RichTextLabel" type="RichTextLabel" parent="Control"]
 layout_mode = 0
-offset_left = 532.0
-offset_top = 397.0
-offset_right = 638.0
-offset_bottom = 428.0
-text = "START GAME
-"
+offset_left = 399.0
+offset_top = 198.0
+offset_right = 740.0
+offset_bottom = 238.0
+text = "CONNECTING"
 
 [connection signal="button_down" from="Control/HOST" to="." method="_on_host_button_down"]
 [connection signal="button_down" from="Control/JOIN" to="." method="_on_join_button_down"]
 [connection signal="text_changed" from="Control/LineEdit" to="." method="_on_line_edit_text_changed"]
-[connection signal="button_down" from="Control/START GAME" to="." method="_on_start_game_button_down"]

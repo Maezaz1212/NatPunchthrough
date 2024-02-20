@@ -1,14 +1,12 @@
 extends Node2D
 
 var Game_started = false
-var player_prefab = preload("res://SCENES/Player.tscn")
 
 var objects_to_sync = {}
-
-var positions_dict = {}
 var controller_puppet_masters = {}
-
+var current_scene
 var CHARS = "1234567890";
+
 func create_unique_object_code():
 	var id = ""
 	for n in 7:
@@ -25,17 +23,19 @@ func _ready():
 	Input.joy_connection_changed.connect(on_joy_connection_changed)
 
 func  _process(delta):
-	if Game_started and Relayconnect.IS_HOST:
-		sync_all_objects_pos()
-	pass	
+	pass
+	
 # START GAME AND SPAWN PLAYERS
-func on_game_start():
+func on_game_load():
+	
+	Relayconnect.game_started_rpc.rpc_id(0,false)
 	var pos = Vector2(randi_range(300,600),-300)
 	
 	#Setup Keyboard Player
-	var puppet_master_keyboard = spawn_object("res://SCENES/Puppet_Master.tscn",Vector2.ZERO,0)
-	puppet_master_keyboard.owner_id = multiplayer.get_unique_id()
+	var puppet_master_keyboard = spawn_object("res://SCENES/NETWORKING/Puppet_Master.tscn",Vector2.ZERO,0)
+	puppet_master_keyboard.network_node.owner_id = multiplayer.get_unique_id()
 	puppet_master_keyboard.controller = false;
+	
 	for controller_id in Input.get_connected_joypads():
 		add_controller_puppet_master(controller_id)
 	
@@ -46,7 +46,7 @@ func on_game_start():
 func add_controller_puppet_master(new_device_id):
 	var puppet_master_controller = spawn_object("res://SCENES/Puppet_Master.tscn",Vector2.ZERO,0)
 	
-	puppet_master_controller.owner_id = multiplayer.get_unique_id()
+	puppet_master_controller.get_node("NetworkVarSync").owner_id = multiplayer.get_unique_id()
 	puppet_master_controller.controller = true
 	puppet_master_controller.device_id = new_device_id
 	
@@ -76,13 +76,15 @@ func spawn_object(object_path : String,pos : Vector2,rot : float,parent_id : Str
 		objects_to_sync[parent_id].add_child(object_instance)
 	else:
 		add_child(object_instance)
-		
+	
 	object_instance.global_position = pos
-	object_instance.global_rotation_degrees = rot
-	object_instance.sync_id = object_id
+	object_instance.rotation_degrees = rot
 	object_instance.name = object_id
-	 
 	objects_to_sync[object_id] = object_instance
+	
+	var networked_sync_node = object_instance.get_node("NetworkVarSync")
+	networked_sync_node.sync_id = object_id
+	
 	Relayconnect.call_rpc_room(spawn_object_rpc,[object_path,pos,rot,object_id,parent_id],false)
 	return object_instance
 
@@ -95,30 +97,57 @@ func spawn_object_rpc(object_path : String,pos : Vector2,rot : float,object_id :
 		objects_to_sync[parent_id].add_child(object_instance)
 	else:
 		add_child(object_instance)
-		
+	
 	object_instance.global_position = pos
 	object_instance.global_rotation_degrees = rot
-	object_instance.sync_id = object_id
 	object_instance.name = object_id
 	objects_to_sync[object_id] = object_instance
-
-## OBJECT SYNCING
-func sync_all_objects_pos():
-	for object_id in objects_to_sync:
-		positions_dict[object_id] = objects_to_sync[object_id].global_position
 	
-	Relayconnect.call_rpc_room(sync_all_objects_rpc,[positions_dict],false)
-
-@rpc("any_peer","call_remote","unreliable")
-func sync_all_objects_rpc(positions_dict):
-		for object_id in positions_dict:
-			objects_to_sync[object_id].global_position = positions_dict[object_id]
-			
-
-
+	var networked_sync_node = object_instance.get_node("NetworkVarSync")
+	networked_sync_node.sync_id = object_id
+		
 @rpc("any_peer","call_local","reliable")
 func change_scene_rpc(scene_path : String):
+	for child in get_children():
+		child.queue_free()
 	get_tree().change_scene_to_file(scene_path)
+	current_scene = scene_path
+	
 
+func sync_game_data(target_player):
+	var dict_to_send = Recursive_child(self)
+	sync_game_data_rpc.rpc_id(target_player,dict_to_send,current_scene)
+	pass
+	
+@rpc("any_peer","call_remote","reliable")
+func sync_game_data_rpc(game_data : Dictionary,scene_path : String):
+	get_tree().change_scene_to_file(scene_path)
+	recursive_build_scene(game_data,self)
+	pass
 
+func Recursive_child(node):
+	var dict = {}
+	for child : Node2D in node.get_children():
+		var network_node = child.get_node_or_null("NetworkVarSync")
+		if !network_node:
+			continue
+		dict[network_node.sync_id] = {
+			"node_path":network_node.instance_file_path,
+			"sync_id":network_node.sync_id,
+			"owner_id":network_node.owner_id,
+			"children":Recursive_child(child),
+		}
+	return dict
 
+func recursive_build_scene(node_dictionary,parent_node):
+	for node in node_dictionary:
+		var node_info = node_dictionary[node]
+		var object_to_spawn = load(node_info.node_path) as PackedScene
+		var object_instance = object_to_spawn.instantiate()
+		parent_node.add_child(object_instance)
+		var network_node = object_instance.get_node("NetworkVarSync")
+		object_instance.name = node_info.sync_id
+		network_node.sync_id = node_info.sync_id
+		
+		objects_to_sync[node_info.sync_id] = object_instance
+		recursive_build_scene(node_info.children,object_instance)

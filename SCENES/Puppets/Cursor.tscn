@@ -1,0 +1,15 @@
+[gd_scene load_steps=2 format=3 uid="uid://ijpa8smals3h"]
+
+[ext_resource type="PackedScene" uid="uid://igx155esedds" path="res://SCENES/NETWORKING/network_var_sync.tscn" id="3_bwp72"]
+
+[node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="NetworkVarSync" parent="." instance=ExtResource("3_bwp72")]
+instance_file_path = "res://SCENES/Puppets/Cursor.tscn"
+is_local_authority = true
