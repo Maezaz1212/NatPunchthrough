@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://hd6wc68o7osy"]
+[gd_scene load_steps=16 format=3 uid="uid://hd6wc68o7osy"]
 
 [ext_resource type="Script" path="res://SCRIPTS/Game_Room.gd" id="1_lue75"]
 [ext_resource type="Texture2D" uid="uid://c1l4tcbtavjpl" path="res://ASSETS/Solid_white.png" id="2_vl1qh"]
@@ -8,7 +8,6 @@
 [ext_resource type="Script" path="res://SCRIPTS/WALLOFDEATH.gd" id="5_gnxqn"]
 [ext_resource type="Script" path="res://SCRIPTS/RaceCamera.gd" id="6_iaqfd"]
 [ext_resource type="Script" path="res://SCENES/RaceGame/finish_line.gd" id="7_sku0x"]
-[ext_resource type="Script" path="res://SCENES/RaceGame/RoomCodeDisplay.gd" id="9_k2brk"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_allfg"]
 size = Vector2(600, 20)
@@ -161,19 +160,12 @@ offset_bottom = 348.0
 
 [node name="NetworkVarSync" parent="WALLOFDEATH" instance=ExtResource("3_xwpkr")]
 reliable_sync_vars = {
-NodePath(".."): ["velocity"]
+NodePath(".."): ["velocity"],
+NodePath("../GameMessage"): ["text"]
 }
 unreliable_sync_vars = {
 NodePath(".."): ["global_position"]
 }
-
-[node name="RoomCodeDisplay" type="RichTextLabel" parent="."]
-offset_left = 268.0
-offset_top = 173.0
-offset_right = 485.0
-offset_bottom = 213.0
-text = "ROOM CODE : "
-script = ExtResource("9_k2brk")
 
 [connection signal="button_down" from="Control/Leave Button" to="." method="_on_leave_button_button_down"]
 [connection signal="body_entered" from="PlayerStartArea" to="PlayerStartArea" method="_on_body_entered"]

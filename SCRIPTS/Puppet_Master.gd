@@ -7,6 +7,7 @@ var device_id := 0
 var controller := true
 var player_name := "" : set = player_name_changed
 
+
 var MoveAxis := Vector2(0,0) : set = MoveAxisChanged
 var LookAxis := Vector2(0,0) : set = LookAxisChanged
 var MousePos := Vector2.ZERO : set = MousePositionChange
@@ -33,7 +34,7 @@ var key_bindings_controller = {
 }
 func _ready():
 	network_node = get_node("NetworkVarSync")
-	
+	add_to_group("puppet_masters")
 	#Input.mouse_mode = Input.MOUSE_MODE_HIDDEN
 	pass
 
@@ -121,9 +122,8 @@ func _input(event : InputEvent):
 @rpc("any_peer","call_local","reliable")
 func ButtonSignalCall(signalName):
 	if get_child_count() < 2 && Relayconnect.IS_HOST:
-		var player = GameManager.spawn_object("res://SCENES/Puppets/Player.tscn",Vector2(300,300),0,name)
-		var network_node = player.get_node("NetworkVarSync")
-		network_node.owner_id = multiplayer.get_remote_sender_id()
+		GameManager.SPAWN_PUPPET_SIGNAL.emit(self,multiplayer.get_remote_sender_id())
+		
 		return
 		
 	match signalName:

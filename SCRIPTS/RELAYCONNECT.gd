@@ -50,7 +50,7 @@ func _on_connected_fail():
 	ON_RELAY_SERVER_FAIL.emit()
 
 func _on_server_disconnected():
-	GameManager.change_scene_rpc("res://SCENES/LOBBY/Lobby.tscn")
+	GameManager.change_scene_rpc("res://SCENES/LOBBY/Lobby.tscn",true)
 	ROOM_DATA = {}
 	ROOM_CODE = ""
 	IS_HOST = false

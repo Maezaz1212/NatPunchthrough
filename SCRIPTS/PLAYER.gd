@@ -12,7 +12,7 @@ const JUMP_VELOCITY = -400.0
 
 
 @export var NameLabel : RichTextLabel
-
+var puppet_master
 var is_dead = false: set = is_dead_changed
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
@@ -25,15 +25,16 @@ var global_pos_last_frame = Vector2.ZERO
 signal OnVariableChange(var_name : String)
 
 func _ready():
-	var parent = get_parent()
-	parent.MoveAxisChangedSignal.connect(onMoveAxisChange)
-	parent.LookAxisChangedSignal.connect(onLookAxisChange)
-	parent.MousePositionChangeSignal.connect(onMousePositionChange)
-	parent.JumpSignal.connect(onJump)
-	parent.PlayerNameChangedSignal.connect(onPlayerNameChanged)
-	is_local_player = parent.network_node.is_local_player
-	NameLabel.text = "[center]%s[/center]" %parent.player_name
+	puppet_master = get_parent()
+	puppet_master.MoveAxisChangedSignal.connect(onMoveAxisChange)
+	puppet_master.LookAxisChangedSignal.connect(onLookAxisChange)
+	puppet_master.MousePositionChangeSignal.connect(onMousePositionChange)
+	puppet_master.JumpSignal.connect(onJump)
+	puppet_master.PlayerNameChangedSignal.connect(onPlayerNameChanged)
+	is_local_player = puppet_master.network_node.is_local_player
+	NameLabel.text = "[center]%s[/center]" %puppet_master.player_name
 	network_node = $NetworkVarSync
+	network_node.owner_id = puppet_master.network_node.owner_id
 	add_to_group("player_instances")
 	
 func _physics_process(delta):

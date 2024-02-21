@@ -19,7 +19,7 @@ func onSyncIdChange(new_sync_id):
 @export var owner_id = 0 : set  = onOwnerIdChange
 func onOwnerIdChange(new_id):
 	owner_id = new_id
-
+	
 	if owner_id == multiplayer.get_unique_id():
 		is_local_player = true
 	else:

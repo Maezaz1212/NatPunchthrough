@@ -1,0 +1,26 @@
+[gd_scene load_steps=3 format=3 uid="uid://cglna433cd3s0"]
+
+[ext_resource type="Script" path="res://SCENES/LOBBY/Multiplayer_Lobby.gd" id="1_qmw6p"]
+[ext_resource type="PackedScene" uid="uid://cndhnvf80jorl" path="res://SCENES/NETWORKING/room_code_display.tscn" id="2_tikey"]
+
+[node name="MultiplayerLobby" type="Node2D"]
+script = ExtResource("1_qmw6p")
+
+[node name="Button" type="Button" parent="."]
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 1022.0
+offset_top = 584.0
+offset_right = 1128.0
+offset_bottom = 615.0
+grow_vertical = 0
+text = "START GAME"
+
+[node name="RoomCodeDisplay" parent="." instance=ExtResource("2_tikey")]
+offset_left = 869.0
+offset_top = 531.0
+offset_right = 1086.0
+offset_bottom = 571.0
+
+[connection signal="button_down" from="Button" to="." method="_on_button_button_down"]
