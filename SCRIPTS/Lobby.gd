@@ -14,9 +14,17 @@ func _ready():
 	Relayconnect.HOST_FAIL.connect(_on_host_fail)
 	Relayconnect.ON_RELAY_SERVER_FAIL.connect(_on_relay_server_fail)
 	Relayconnect.ON_RELAY_SERVER_CONNECT.connect(_on_relay_server_connect)
+	Input.joy_connection_changed.connect(on_joy_connection_changed)
 	for controller_id in Input.get_connected_joypads():
 		add_controller_lobby(controller_id)
-	
+
+
+func on_joy_connection_changed(device_id : int,connected : bool):
+	if connected:
+		add_controller_lobby(device_id)
+	else:
+		remove_controller_lobby(device_id)
+
 func add_controller_lobby(device_id):
 	var object_to_spawn = ControllerLobbyPrefab
 	var object_instance = object_to_spawn.instantiate() 

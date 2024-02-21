@@ -66,7 +66,6 @@ func _ready():
 			always_server_vars_to_sync[i] = always_server_sync_vars[key]
 			i+=1
 		
-	
 	if is_local_player:
 		set_process(false)
 		return	
@@ -160,7 +159,6 @@ func reliable_sync(sync_dict : Dictionary):
 
 @rpc("any_peer","call_remote","unreliable_ordered")
 func unreliable_sync(sync_dict : Dictionary):
-	
 	for key in sync_dict:
 		for variable in sync_dict[key]:
 			var node := node_array[key] as Node2D

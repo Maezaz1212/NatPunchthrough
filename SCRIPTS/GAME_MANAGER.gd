@@ -47,7 +47,7 @@ func on_game_load():
 
 ## PUPPET MASTER CONTROLLERS
 func add_controller_puppet_master(new_device_id):
-	var puppet_master_controller = spawn_object("res://SCENES/Puppet_Master.tscn",Vector2.ZERO,0)
+	var puppet_master_controller = spawn_object("res://SCENES/NETWORKING/Puppet_Master.tscn",Vector2.ZERO,0)
 	
 	puppet_master_controller.get_node("NetworkVarSync").owner_id = multiplayer.get_unique_id()
 	puppet_master_controller.controller = true
