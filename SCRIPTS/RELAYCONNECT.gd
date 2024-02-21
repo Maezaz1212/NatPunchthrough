@@ -8,6 +8,9 @@ signal HOST_FAIL(error_message)
 signal ON_RELAY_SERVER_CONNECT()
 signal ON_RELAY_SERVER_FAIL()
 signal ON_RELAY_SERVER_DISCONNECT()
+
+signal NETWORK_TICK(unix_time)
+var network_ticking_started := false
 @export var typed_room_code= ""
 var ROOM_DATA := {}
 var ROOM_CODE : String
@@ -19,7 +22,7 @@ var CHARS := "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	var relay_connect = ENetMultiplayerPeer.new()
-	var error = relay_connect.create_client("192.168.68.71",25566)
+	var error = relay_connect.create_client("3.107.31.230",25566)
 	if error:
 		return(error)
 		
@@ -27,7 +30,18 @@ func _ready():
 	multiplayer.connected_to_server.connect(_on_connected_to_server)
 	multiplayer.connection_failed.connect(_on_connected_fail)
 	multiplayer.server_disconnected.connect(_on_server_disconnected)
+	NetworkTicker()
+	
 
+	
+		
+func NetworkTicker():
+	var unix_time_with_ms = Time.get_unix_time_from_system() * 1000 
+	var formattedTime = floorf(unix_time_with_ms/200) * 200
+	NETWORK_TICK.emit(formattedTime)
+	await get_tree().create_timer(0.2).timeout
+	NetworkTicker()
+	
 func _on_connected_to_server():
 	_resgister_player.rpc_id(0)
 	ON_RELAY_SERVER_CONNECT.emit()
@@ -116,7 +130,7 @@ func room_closed():
 		child.queue_free()
 	IS_HOST = false
 	HOST_ID = 0
-	get_tree().change_scene_to_file("res://SCENES/Lobby.tscn")
+	get_tree().change_scene_to_file("res://SCENES/LOBBY/Lobby.tscn")
 
 @rpc("any_peer","call_remote","reliable")
 func _resgister_player():

@@ -5,6 +5,7 @@ var network_node : Node2D
 
 var device_id := 0
 var controller := true
+var player_name := "" : set = player_name_changed
 
 var MoveAxis := Vector2(0,0) : set = MoveAxisChanged
 var LookAxis := Vector2(0,0) : set = LookAxisChanged
@@ -14,7 +15,7 @@ signal MoveAxisChangedSignal(move_dir : Vector2)
 signal LookAxisChangedSignal(lookDir : Vector2)
 signal MousePositionChangeSignal(mouse_pos : Vector2)
 signal JumpSignal()
-
+signal PlayerNameChangedSignal(new_name)
 var joystick_left_deadzone := 0.2
 var joystick_right_deadzone := 0.2
 var key_bindings_keyboard = {
@@ -89,7 +90,6 @@ func _input(event : InputEvent):
 				return
 			"InputEventKey":
 				var key = OS.get_keycode_string(event.keycode)
-				print(key)
 				if event.echo:
 					return
 				match key_bindings_keyboard.find_key(key):
@@ -162,7 +162,9 @@ func MousePositionChange(new_mouse_pos):
 	
 #endregion
 
-
+func player_name_changed(new_player_name):
+	player_name = new_player_name
+	PlayerNameChangedSignal.emit(new_player_name)
 
 
 

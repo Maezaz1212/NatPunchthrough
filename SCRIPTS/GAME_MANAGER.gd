@@ -7,6 +7,9 @@ var controller_puppet_masters = {}
 var current_scene
 var CHARS = "1234567890";
 
+var player_names_controller : Dictionary = {}
+var player_name_keyboard = "HEYYYO"
+
 func create_unique_object_code():
 	var id = ""
 	for n in 7:
@@ -35,7 +38,7 @@ func on_game_load():
 	var puppet_master_keyboard = spawn_object("res://SCENES/NETWORKING/Puppet_Master.tscn",Vector2.ZERO,0)
 	puppet_master_keyboard.network_node.owner_id = multiplayer.get_unique_id()
 	puppet_master_keyboard.controller = false;
-	
+	puppet_master_keyboard.player_name = player_name_keyboard
 	for controller_id in Input.get_connected_joypads():
 		add_controller_puppet_master(controller_id)
 	
@@ -49,7 +52,7 @@ func add_controller_puppet_master(new_device_id):
 	puppet_master_controller.get_node("NetworkVarSync").owner_id = multiplayer.get_unique_id()
 	puppet_master_controller.controller = true
 	puppet_master_controller.device_id = new_device_id
-	
+	puppet_master_controller.player_name = player_names_controller[new_device_id]
 	controller_puppet_masters[new_device_id] = puppet_master_controller
 
 func remove_controller_puppet_master(device_id):
@@ -127,7 +130,7 @@ func sync_game_data_rpc(game_data : Dictionary,scene_path : String):
 
 func Recursive_child(node):
 	var dict = {}
-	for child : Node2D in node.get_children():
+	for child in node.get_children():
 		var network_node = child.get_node_or_null("NetworkVarSync")
 		if !network_node:
 			continue
@@ -148,6 +151,7 @@ func recursive_build_scene(node_dictionary,parent_node):
 		var network_node = object_instance.get_node("NetworkVarSync")
 		object_instance.name = node_info.sync_id
 		network_node.sync_id = node_info.sync_id
+		network_node.owner_id = node_info.owner_id
 		
 		objects_to_sync[node_info.sync_id] = object_instance
 		recursive_build_scene(node_info.children,object_instance)

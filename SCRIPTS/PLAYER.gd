@@ -2,12 +2,16 @@ extends CharacterBody2D
 
 var node_path = "res://SCENES/Player.tscn"
 
+var network_node : Node2D
 var sync_id = ""
 var owner_id = 0
 var is_local_player = false
 
 var Speed = 300.0 : set = set_speed
 const JUMP_VELOCITY = -400.0
+
+
+@export var NameLabel : RichTextLabel
 
 var is_dead = false: set = is_dead_changed
 # Get the gravity from the project settings to be synced with RigidBody nodes.
@@ -26,7 +30,10 @@ func _ready():
 	parent.LookAxisChangedSignal.connect(onLookAxisChange)
 	parent.MousePositionChangeSignal.connect(onMousePositionChange)
 	parent.JumpSignal.connect(onJump)
+	parent.PlayerNameChangedSignal.connect(onPlayerNameChanged)
 	is_local_player = parent.network_node.is_local_player
+	NameLabel.text = "[center]%s[/center]" %parent.player_name
+	network_node = $NetworkVarSync
 	add_to_group("player_instances")
 	
 func _physics_process(delta):
@@ -52,9 +59,7 @@ func _physics_process(delta):
 func _process(delta):
 	if !is_local_player:
 		return
-	if !global_pos_last_frame.is_equal_approx(global_position):
-		#Relayconnect.call_rpc_room(position_sync,[global_position],false)
-		global_pos_last_frame = global_position
+		
 		
 
 func set_speed(new_speed : int):
@@ -82,3 +87,7 @@ func is_dead_changed(dead : bool):
 		get_node("CollisionShape2D").set_deferred("disabled",false)
 	is_dead = dead
 		
+func onPlayerNameChanged(new_player_name):
+	NameLabel.text = "[center]%s[/center]" %new_player_name
+	
+	

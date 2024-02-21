@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://b8raeg7ui665l"]
+
+[node name="ControllerLobby" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+
+[node name="RichTextLabel" type="RichTextLabel" parent="."]
+layout_mode = 0
+offset_right = 130.0
+offset_bottom = 40.0
+text = "Controller Name"
+
+[node name="LineEdit" type="LineEdit" parent="."]
+layout_mode = 0
+offset_left = -1.0
+offset_top = 28.0
+offset_right = 121.0
+offset_bottom = 59.0

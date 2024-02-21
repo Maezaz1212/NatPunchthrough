@@ -98,8 +98,9 @@ animations = [{
 "speed": 5.0
 }]
 
-[node name="Player" type="CharacterBody2D"]
+[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("NameLabel")]
 script = ExtResource("1_4th65")
+NameLabel = NodePath("RichTextLabel")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CapsuleShape2D_mu1et")
@@ -107,11 +108,18 @@ shape = SubResource("CapsuleShape2D_mu1et")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_6wf0q")
 
+[node name="RichTextLabel" type="RichTextLabel" parent="."]
+offset_left = -37.0
+offset_top = -22.0
+offset_right = 40.0
+offset_bottom = -3.0
+theme_override_font_sizes/normal_font_size = 7
+bbcode_enabled = true
+text = "[center]NAME[/center]"
+
 [node name="NetworkVarSync" parent="." instance=ExtResource("3_2su5m")]
 instance_file_path = "res://SCENES/Puppets/Player.tscn"
-reliable_sync_vars = {
-NodePath(".."): ["is_dead"]
-}
 unreliable_sync_vars = {
-NodePath(".."): ["global_position", "velocity"]
+NodePath(".."): ["global_position"]
 }
+is_local_authority = true
