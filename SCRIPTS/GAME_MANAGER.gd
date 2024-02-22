@@ -31,6 +31,8 @@ func _ready():
 
 
 func spawn_puppet_masters():
+	if get_tree().get_nodes_in_group(str(multiplayer.get_unique_id())).size() >= 1:
+		return
 	#Setup Keyboard Player
 	var puppet_master_keyboard = spawn_object("res://SCENES/NETWORKING/Puppet_Master.tscn",Vector2.ZERO,0)
 	puppet_master_keyboard.network_node.owner_id = multiplayer.get_unique_id()

@@ -81,6 +81,7 @@ func _input(event : InputEvent):
 		match event.get_class():
 			"InputEventJoypadButton":
 				if event.pressed:
+					
 					Relayconnect.call_rpc_room(ButtonSignalCall,[key_bindings_controller.find_key(event.button_index)])
 			
 	else:
@@ -122,6 +123,7 @@ func _input(event : InputEvent):
 @rpc("any_peer","call_local","reliable")
 func ButtonSignalCall(signalName):
 	if get_child_count() < 2 && Relayconnect.IS_HOST:
+		print("Here")
 		GameManager.SPAWN_PUPPET_SIGNAL.emit(self)
 		return
 		

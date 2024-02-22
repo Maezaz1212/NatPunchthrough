@@ -3,8 +3,8 @@ extends Node2D
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	if get_tree().get_nodes_in_group("puppet_masters").size() <= 0:
-		GameManager.spawn_puppet_masters()
+	
+	GameManager.spawn_puppet_masters()
 	GameManager.SPAWN_PUPPET_SIGNAL.connect(spawn_player_customiser)
 	if Relayconnect.IS_HOST:
 		Relayconnect.game_started_rpc.rpc_id(0,false)	
