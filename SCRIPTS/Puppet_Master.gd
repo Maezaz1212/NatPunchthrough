@@ -80,8 +80,9 @@ func _input(event : InputEvent):
 	if controller:
 		match event.get_class():
 			"InputEventJoypadButton":
+				if event.device != device_id:
+					return
 				if event.pressed:
-					
 					Relayconnect.call_rpc_room(ButtonSignalCall,[key_bindings_controller.find_key(event.button_index)])
 			
 	else:

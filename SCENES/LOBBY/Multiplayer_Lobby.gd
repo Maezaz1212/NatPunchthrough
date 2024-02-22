@@ -16,8 +16,8 @@ func spawn_player_customiser(puppet_master):
 	var i = 0
 
 	while !found_pos:
-		var x_raw = i % 7 
-		var y_raw = floor(i / 7) 
+		var x_raw = i % 4
+		var y_raw = floor(i / 4) 
 		var over_lapped = false
 		for lobby_player in get_tree().get_nodes_in_group("lobby_players"):
 			

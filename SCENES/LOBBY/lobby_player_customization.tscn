@@ -50,8 +50,7 @@ focus_neighbor_top = NodePath("../Z")
 focus_neighbor_right = NodePath("../C")
 focus_neighbor_bottom = NodePath("../F")
 disabled = true
-text = "B
-"
+text = "B"
 
 [node name="C" type="Button" parent="Keyboard"]
 custom_minimum_size = Vector2(30, 0)
@@ -91,8 +90,7 @@ focus_neighbor_top = NodePath("../B")
 focus_neighbor_right = NodePath("../G")
 focus_neighbor_bottom = NodePath("../J")
 disabled = true
-text = "F
-"
+text = "F"
 
 [node name="G" type="Button" parent="Keyboard"]
 custom_minimum_size = Vector2(30, 0)
@@ -102,8 +100,7 @@ focus_neighbor_top = NodePath("../C")
 focus_neighbor_right = NodePath("../H")
 focus_neighbor_bottom = NodePath("../K")
 disabled = true
-text = "G
-"
+text = "G"
 
 [node name="H" type="Button" parent="Keyboard"]
 custom_minimum_size = Vector2(30, 0)

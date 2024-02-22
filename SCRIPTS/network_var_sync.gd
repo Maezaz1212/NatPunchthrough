@@ -1,5 +1,6 @@
 extends Node2D
 
+signal DestroyingOnPurpose
 var parent
 var positions_to_interpolate = {}
 @export var instance_file_path : String
@@ -178,13 +179,12 @@ func unreliable_sync(sync_dict : Dictionary):
 					if node.get(variable) != sync_dict[key][variable]:
 						node.set(variable,sync_dict[key][variable])
 
-func _notification(what):
-	match what:
-		NOTIFICATION_PREDELETE:
-			Relayconnect.call_rpc_room(Destroyed_rpc,[])
 
-@rpc("any_peer","call_remote","reliable")
-func Destroyed_rpc():
-	get_parent().queue_free()
+func Destroy_Networked():
+	Relayconnect.call_rpc_room(Destroy_RPC,[])
 	
+@rpc("any_peer","call_local","reliable")
+func Destroy_RPC():
+	DestroyingOnPurpose.emit()
+	get_parent().queue_free()
 
