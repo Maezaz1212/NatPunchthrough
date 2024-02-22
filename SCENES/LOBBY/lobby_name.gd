@@ -9,7 +9,6 @@ extends Control
 var controller_id := 0
 
 var puppet_master
-var multiplayer_lobby
 var lobby_grid_pos
 @export var prior_button : Button 
 @export var selected_button : Button : set = onSelectedButtonChanged
@@ -95,12 +94,12 @@ func _on_line_edit_text_changed(new_text):
 	puppet_master.player_name = new_text
 
 
-@rpc("any_peer","call_local","reliable") 
-func disconnect_cmd():
-	puppet_master.remove_from_group("in_game")
-	multiplayer_lobby.positions_taken.erase(lobby_grid_pos)
-	queue_free()
-
 func _on_disconnect_button_button_down():
-	disconnect_cmd.rpc_id(Relayconnect.HOST_ID)
+	queue_free()
 	pass # Replace with function body.
+
+func _notification(what):
+	match what:
+		NOTIFICATION_PREDELETE:
+			puppet_master.remove_from_group("in_game")
+			get_tree().root.get_node("MultiplayerLobby").positions_taken.erase(lobby_grid_pos)

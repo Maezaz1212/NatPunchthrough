@@ -26,7 +26,6 @@ func spawn_player_customiser(puppet_master):
 			var y_pos = y_raw * 300
 			found_pos = true
 			var player = GameManager.spawn_object("res://SCENES/LOBBY/lobby_player_customization.tscn",Vector2(x_pos,y_pos),0,puppet_master.name)
-			player.multiplayer_lobby = self
 			player.lobby_grid_pos = Vector2(x_raw,y_raw)
 		
 		i+=1

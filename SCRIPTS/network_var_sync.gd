@@ -179,12 +179,11 @@ func unreliable_sync(sync_dict : Dictionary):
 						node.set(variable,sync_dict[key][variable])
 
 func _notification(what):
-	
 	match what:
 		NOTIFICATION_PREDELETE:
 			Relayconnect.call_rpc_room(Destroyed_rpc,[])
 
-@rpc("any_peer","call_local","reliable")
+@rpc("any_peer","call_remote","reliable")
 func Destroyed_rpc():
 	get_parent().queue_free()
 	
