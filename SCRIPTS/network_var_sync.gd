@@ -177,5 +177,10 @@ func unreliable_sync(sync_dict : Dictionary):
 				_:
 					if node.get(variable) != sync_dict[key][variable]:
 						node.set(variable,sync_dict[key][variable])
-	
 
+@rpc("any_peer","call_local","reliable")
+func Destroyed_rpc():
+	get_parent().queue_free()
+	
+func _exit_tree():
+	Relayconnect.call_rpc_room(Destroyed_rpc,[])
