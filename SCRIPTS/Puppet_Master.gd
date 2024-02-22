@@ -123,7 +123,6 @@ func _input(event : InputEvent):
 func ButtonSignalCall(signalName):
 	if get_child_count() < 2 && Relayconnect.IS_HOST:
 		GameManager.SPAWN_PUPPET_SIGNAL.emit(self)
-		
 		return
 		
 	match signalName:
