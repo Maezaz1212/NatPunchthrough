@@ -122,4 +122,7 @@ instance_file_path = "res://SCENES/Puppets/Player.tscn"
 unreliable_sync_vars = {
 NodePath(".."): ["global_position"]
 }
+always_server_sync_vars = {
+NodePath(".."): ["is_dead"]
+}
 is_local_authority = true

@@ -110,6 +110,7 @@ func _process(delta):
 					something_different_server = true
 		
 		if something_different_server:
+			print(new_dictionary_server)
 			Relayconnect.call_rpc_room(reliable_sync,[new_dictionary_server],false)
 	
 	if !Relayconnect.IS_HOST and !is_local_authority:

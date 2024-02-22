@@ -27,15 +27,16 @@ func _ready():
 func _process(delta):
 	if !Relayconnect.IS_HOST:
 		set_process(false)
-		
-	var dead_players = 0
+
+	
 	var all_players = get_tree().get_nodes_in_group("player_instances")
+	var alive_players = get_tree().get_nodes_in_group("player_instances")
 	for player in all_players:
 		if player.is_dead:
-			dead_players += 1
+			alive_players.erase(player)
 	
-	if dead_players >= all_players.size() && all_players.size() > 0:
-		end_race_game("EVERYONE IS DEAD")
+	if alive_players.size() == 1:
+		end_race_game("%s WINS" %alive_players[0].puppet_master.player_name)
 			
 
 func start_race_game():

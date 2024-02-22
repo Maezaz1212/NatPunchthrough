@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://hd6wc68o7osy"]
+[gd_scene load_steps=19 format=3 uid="uid://hd6wc68o7osy"]
 
 [ext_resource type="Script" path="res://SCRIPTS/Game_Room.gd" id="1_lue75"]
 [ext_resource type="Texture2D" uid="uid://c1l4tcbtavjpl" path="res://ASSETS/Solid_white.png" id="2_vl1qh"]
@@ -8,6 +8,7 @@
 [ext_resource type="Script" path="res://SCRIPTS/WALLOFDEATH.gd" id="5_gnxqn"]
 [ext_resource type="Script" path="res://SCRIPTS/RaceCamera.gd" id="6_iaqfd"]
 [ext_resource type="Script" path="res://SCENES/RaceGame/finish_line.gd" id="7_sku0x"]
+[ext_resource type="Script" path="res://SCENES/RaceGame/MOVINGPLATFORM.gd" id="9_hyug6"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_allfg"]
 size = Vector2(600, 20)
@@ -20,9 +21,6 @@ size = Vector2(126, 118)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_hsjdx"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_hysj1"]
-size = Vector2(679, 20)
-
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_idjkw"]
 size = Vector2(63, 189)
 
@@ -31,6 +29,12 @@ size = Vector2(196, 850)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_pa4d7"]
 size = Vector2(20, 517)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_aop8e"]
+size = Vector2(1e+07, 100)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hysj1"]
+size = Vector2(300, 20)
 
 [node name="GAME" type="Node2D" node_paths=PackedStringArray("textLabel", "WALLOFDEATH", "DOOR", "Game_message", "LobbyButton")]
 script = ExtResource("1_lue75")
@@ -123,21 +127,8 @@ reliable_sync_vars = {
 NodePath("../RichTextLabel"): ["text"]
 }
 
-[node name="RUN_LEVEL" type="Node2D" parent="."]
-
-[node name="StaticBody2D" type="StaticBody2D" parent="RUN_LEVEL"]
-position = Vector2(1196, 500)
-
-[node name="Sprite2D" type="Sprite2D" parent="RUN_LEVEL/StaticBody2D"]
-scale = Vector2(3.385, 0.11)
-texture = ExtResource("2_vl1qh")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="RUN_LEVEL/StaticBody2D"]
-position = Vector2(-2.5, 0)
-shape = SubResource("RectangleShape2D_hysj1")
-
 [node name="FINISHLine" type="Area2D" parent="."]
-position = Vector2(1518, 504)
+position = Vector2(4672, 549)
 script = ExtResource("7_sku0x")
 
 [node name="Sprite2D" type="Sprite2D" parent="FINISHLine"]
@@ -191,9 +182,152 @@ position = Vector2(90, -1)
 position = Vector2(0, 248.5)
 shape = SubResource("RectangleShape2D_pa4d7")
 
+[node name="BOTTOMOUTOFBOUND" type="Area2D" parent="."]
+position = Vector2(362, 849)
+script = ExtResource("5_gnxqn")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BOTTOMOUTOFBOUND"]
+position = Vector2(0, 327)
+shape = SubResource("RectangleShape2D_aop8e")
+
+[node name="RUN_LEVEL" type="Node2D" parent="."]
+
+[node name="FirstJumpingArea" type="Node2D" parent="RUN_LEVEL"]
+
+[node name="StaticBody2D" type="StaticBody2D" parent="RUN_LEVEL/FirstJumpingArea"]
+position = Vector2(1010, 501)
+
+[node name="Sprite2D" type="Sprite2D" parent="RUN_LEVEL/FirstJumpingArea/StaticBody2D"]
+scale = Vector2(1.4975, 0.11)
+texture = ExtResource("2_vl1qh")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RUN_LEVEL/FirstJumpingArea/StaticBody2D"]
+shape = SubResource("RectangleShape2D_hysj1")
+
+[node name="StaticBody2D2" type="StaticBody2D" parent="RUN_LEVEL/FirstJumpingArea"]
+position = Vector2(1580, 501)
+
+[node name="Sprite2D" type="Sprite2D" parent="RUN_LEVEL/FirstJumpingArea/StaticBody2D2"]
+scale = Vector2(1.4975, 0.11)
+texture = ExtResource("2_vl1qh")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RUN_LEVEL/FirstJumpingArea/StaticBody2D2"]
+shape = SubResource("RectangleShape2D_hysj1")
+
+[node name="StaticBody2D3" type="StaticBody2D" parent="RUN_LEVEL/FirstJumpingArea"]
+position = Vector2(2150, 500)
+
+[node name="Sprite2D" type="Sprite2D" parent="RUN_LEVEL/FirstJumpingArea/StaticBody2D3"]
+scale = Vector2(1.4975, 0.11)
+texture = ExtResource("2_vl1qh")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RUN_LEVEL/FirstJumpingArea/StaticBody2D3"]
+shape = SubResource("RectangleShape2D_hysj1")
+
+[node name="StaticBody2D4" type="StaticBody2D" parent="RUN_LEVEL/FirstJumpingArea"]
+position = Vector2(2720, 500)
+
+[node name="Sprite2D" type="Sprite2D" parent="RUN_LEVEL/FirstJumpingArea/StaticBody2D4"]
+scale = Vector2(1.4975, 0.11)
+texture = ExtResource("2_vl1qh")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RUN_LEVEL/FirstJumpingArea/StaticBody2D4"]
+shape = SubResource("RectangleShape2D_hysj1")
+
+[node name="Staircase" type="StaticBody2D" parent="RUN_LEVEL"]
+position = Vector2(3290, 500)
+
+[node name="Sprite2D" type="Sprite2D" parent="RUN_LEVEL/Staircase"]
+scale = Vector2(1.4975, 0.11)
+texture = ExtResource("2_vl1qh")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RUN_LEVEL/Staircase"]
+shape = SubResource("RectangleShape2D_hysj1")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="RUN_LEVEL/Staircase"]
+position = Vector2(20, -20)
+
+[node name="Sprite2D" type="Sprite2D" parent="RUN_LEVEL/Staircase/StaticBody2D"]
+scale = Vector2(1.4975, 0.11)
+texture = ExtResource("2_vl1qh")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RUN_LEVEL/Staircase/StaticBody2D"]
+shape = SubResource("RectangleShape2D_hysj1")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="RUN_LEVEL/Staircase/StaticBody2D"]
+position = Vector2(20, -20)
+
+[node name="Sprite2D" type="Sprite2D" parent="RUN_LEVEL/Staircase/StaticBody2D/StaticBody2D"]
+scale = Vector2(1.4975, 0.11)
+texture = ExtResource("2_vl1qh")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RUN_LEVEL/Staircase/StaticBody2D/StaticBody2D"]
+shape = SubResource("RectangleShape2D_hysj1")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="RUN_LEVEL/Staircase/StaticBody2D/StaticBody2D"]
+position = Vector2(20, -20)
+
+[node name="Sprite2D" type="Sprite2D" parent="RUN_LEVEL/Staircase/StaticBody2D/StaticBody2D/StaticBody2D"]
+scale = Vector2(1.4975, 0.11)
+texture = ExtResource("2_vl1qh")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RUN_LEVEL/Staircase/StaticBody2D/StaticBody2D/StaticBody2D"]
+shape = SubResource("RectangleShape2D_hysj1")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="RUN_LEVEL/Staircase/StaticBody2D/StaticBody2D/StaticBody2D"]
+position = Vector2(20, -20)
+
+[node name="Sprite2D" type="Sprite2D" parent="RUN_LEVEL/Staircase/StaticBody2D/StaticBody2D/StaticBody2D/StaticBody2D"]
+scale = Vector2(1.4975, 0.11)
+texture = ExtResource("2_vl1qh")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RUN_LEVEL/Staircase/StaticBody2D/StaticBody2D/StaticBody2D/StaticBody2D"]
+shape = SubResource("RectangleShape2D_hysj1")
+
+[node name="MOVING PLATFORM OBSTACLE" type="Node2D" parent="RUN_LEVEL"]
+
+[node name="StaticBody2D" type="StaticBody2D" parent="RUN_LEVEL/MOVING PLATFORM OBSTACLE"]
+position = Vector2(3821, 400)
+
+[node name="Sprite2D" type="Sprite2D" parent="RUN_LEVEL/MOVING PLATFORM OBSTACLE/StaticBody2D"]
+scale = Vector2(1.4975, 0.11)
+texture = ExtResource("2_vl1qh")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RUN_LEVEL/MOVING PLATFORM OBSTACLE/StaticBody2D"]
+shape = SubResource("RectangleShape2D_hysj1")
+
+[node name="MOVINGPLATFORM" type="AnimatableBody2D" parent="RUN_LEVEL/MOVING PLATFORM OBSTACLE"]
+position = Vector2(4054, 324)
+script = ExtResource("9_hyug6")
+velocity = Vector2(-20, 0)
+
+[node name="Sprite2D" type="Sprite2D" parent="RUN_LEVEL/MOVING PLATFORM OBSTACLE/MOVINGPLATFORM"]
+scale = Vector2(1.4975, 0.11)
+texture = ExtResource("2_vl1qh")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RUN_LEVEL/MOVING PLATFORM OBSTACLE/MOVINGPLATFORM"]
+shape = SubResource("RectangleShape2D_hysj1")
+
+[node name="TimeTillTurnTimer" type="Timer" parent="RUN_LEVEL/MOVING PLATFORM OBSTACLE/MOVINGPLATFORM"]
+autostart = true
+
+[node name="NetworkVarSync" parent="RUN_LEVEL/MOVING PLATFORM OBSTACLE/MOVINGPLATFORM" instance=ExtResource("3_xwpkr")]
+
+[node name="FINISHLINEPLATFORM" type="StaticBody2D" parent="RUN_LEVEL"]
+position = Vector2(4660, 542)
+
+[node name="Sprite2D" type="Sprite2D" parent="RUN_LEVEL/FINISHLINEPLATFORM"]
+scale = Vector2(1.4975, 0.11)
+texture = ExtResource("2_vl1qh")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RUN_LEVEL/FINISHLINEPLATFORM"]
+shape = SubResource("RectangleShape2D_hysj1")
+
 [connection signal="button_down" from="Control/Leave Button" to="." method="_on_leave_button_button_down"]
 [connection signal="button_down" from="Control/Lobby Button" to="." method="_on_lobby_button_button_down"]
 [connection signal="body_entered" from="PlayerStartArea" to="PlayerStartArea" method="_on_body_entered"]
 [connection signal="body_exited" from="PlayerStartArea" to="PlayerStartArea" method="_on_body_exited"]
 [connection signal="body_entered" from="FINISHLine" to="FINISHLine" method="_on_body_entered"]
 [connection signal="body_entered" from="WALLOFDEATH" to="WALLOFDEATH" method="_on_body_entered"]
+[connection signal="body_entered" from="BOTTOMOUTOFBOUND" to="BOTTOMOUTOFBOUND" method="_on_body_entered"]
+[connection signal="timeout" from="RUN_LEVEL/MOVING PLATFORM OBSTACLE/MOVINGPLATFORM/TimeTillTurnTimer" to="RUN_LEVEL/MOVING PLATFORM OBSTACLE/MOVINGPLATFORM" method="_on_time_till_turn_timer_timeout"]
