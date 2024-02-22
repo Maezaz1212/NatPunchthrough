@@ -1,6 +1,6 @@
 extends Node2D
 
-var Game_started = false
+var host_started = false
 
 var objects_to_sync = {}
 var controller_puppet_masters = {}
@@ -54,7 +54,7 @@ func remove_controller_puppet_master(device_id):
 	controller_puppet_masters.erase(device_id)
 	
 func on_joy_connection_changed(device_id : int,connected : bool):
-	if !Game_started:
+	if !host_started:
 		return
 	if connected:
 		add_controller_puppet_master(device_id)

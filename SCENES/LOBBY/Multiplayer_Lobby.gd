@@ -1,6 +1,6 @@
 extends Node2D
 @export var StartGameButton:Button
-
+var positions_taken = {}
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	
@@ -13,10 +13,23 @@ func _ready():
 		
 	
 func spawn_player_customiser(puppet_master):
-	var x_pos = get_tree().get_nodes_in_group("lobby_players").size() % 7 * 250
-	var y_pos = floor(get_tree().get_nodes_in_group("lobby_players").size() / 7) * 300
-	
-	var player = GameManager.spawn_object("res://SCENES/LOBBY/lobby_player_customization.tscn",Vector2(x_pos,y_pos),0,puppet_master.name)
+	var found_pos = false
+	var i = 0
+
+	while !found_pos:
+		var x_raw = i % 7 
+		var y_raw = floor(i / 7) 
+
+		if !positions_taken.has(Vector2(x_raw,y_raw)):
+			positions_taken[Vector2(x_raw,y_raw)] = "TAKEN"
+			var x_pos = x_raw * 250
+			var y_pos = y_raw * 300
+			found_pos = true
+			var player = GameManager.spawn_object("res://SCENES/LOBBY/lobby_player_customization.tscn",Vector2(x_pos,y_pos),0,puppet_master.name)
+			player.multiplayer_lobby = self
+			player.lobby_grid_pos = Vector2(x_raw,y_raw)
+		
+		i+=1
 
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.

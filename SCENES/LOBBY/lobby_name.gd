@@ -9,6 +9,8 @@ extends Control
 var controller_id := 0
 
 var puppet_master
+var multiplayer_lobby
+var lobby_grid_pos
 @export var prior_button : Button 
 @export var selected_button : Button : set = onSelectedButtonChanged
 
@@ -95,5 +97,6 @@ func _on_line_edit_text_changed(new_text):
 
 func _on_disconnect_button_button_down():
 	puppet_master.remove_from_group("in_game")
+	multiplayer_lobby.positions_taken.erase(lobby_grid_pos)
 	queue_free()
 	pass # Replace with function body.

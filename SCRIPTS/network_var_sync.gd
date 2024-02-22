@@ -182,7 +182,6 @@ func _notification(what):
 	
 	match what:
 		NOTIFICATION_PREDELETE:
-			print("HERE")
 			Relayconnect.call_rpc_room(Destroyed_rpc,[])
 
 @rpc("any_peer","call_local","reliable")

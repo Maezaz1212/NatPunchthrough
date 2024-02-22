@@ -18,6 +18,7 @@ func _ready():
 
 	
 func _on_host_success():
+	GameManager.host_started = true
 	Relayconnect.call_rpc_room(GameManager.change_scene_rpc,["res://SCENES/LOBBY/Multiplayer_Lobby.tscn",true])
 
 func _on_host_fail():
@@ -25,6 +26,7 @@ func _on_host_fail():
 	print("HOST FAIL")
 
 func _on_join_success():
+	GameManager.host_started = true
 	print("JOIN SUCCESS")
 
 func _on_join_fail(error_message):
