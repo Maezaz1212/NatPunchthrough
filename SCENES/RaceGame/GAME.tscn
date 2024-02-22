@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://hd6wc68o7osy"]
+[gd_scene load_steps=17 format=3 uid="uid://hd6wc68o7osy"]
 
 [ext_resource type="Script" path="res://SCRIPTS/Game_Room.gd" id="1_lue75"]
 [ext_resource type="Texture2D" uid="uid://c1l4tcbtavjpl" path="res://ASSETS/Solid_white.png" id="2_vl1qh"]
@@ -29,12 +29,16 @@ size = Vector2(63, 189)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_f8aet"]
 size = Vector2(196, 850)
 
-[node name="GAME" type="Node2D" node_paths=PackedStringArray("textLabel", "WALLOFDEATH", "DOOR", "Game_message")]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_pa4d7"]
+size = Vector2(20, 517)
+
+[node name="GAME" type="Node2D" node_paths=PackedStringArray("textLabel", "WALLOFDEATH", "DOOR", "Game_message", "LobbyButton")]
 script = ExtResource("1_lue75")
 textLabel = NodePath("PlayerStartArea/RichTextLabel")
 WALLOFDEATH = NodePath("WALLOFDEATH")
 DOOR = NodePath("DOOR")
 Game_message = NodePath("WALLOFDEATH/GameMessage")
+LobbyButton = NodePath("Control/Lobby Button")
 
 [node name="LobbyGround" type="StaticBody2D" parent="."]
 position = Vector2(557.705, 500)
@@ -51,16 +55,27 @@ texture = ExtResource("2_vl1qh")
 [node name="Control" type="Control" parent="."]
 layout_mode = 3
 anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
+offset_left = 312.0
+offset_top = 561.0
+offset_right = 352.0
+offset_bottom = 601.0
 
 [node name="Leave Button" type="Button" parent="Control"]
 layout_mode = 0
-offset_left = 820.0
-offset_top = 551.0
-offset_right = 876.0
-offset_bottom = 582.0
-text = "LEAVE"
+offset_left = -25.0
+offset_top = 2.0
+offset_right = 81.0
+offset_bottom = 33.0
+text = "LEAVE GAME"
+
+[node name="Lobby Button" type="Button" parent="Control"]
+layout_mode = 0
+offset_left = -24.0
+offset_top = -37.0
+offset_right = 125.0
+offset_bottom = -6.0
+disabled = true
+text = "Return To Lobby"
 
 [node name="DOOR" type="StaticBody2D" parent="."]
 position = Vector2(851, 501)
@@ -135,6 +150,7 @@ position = Vector2(-22.5, -116.5)
 shape = SubResource("RectangleShape2D_idjkw")
 
 [node name="WALLOFDEATH" type="Area2D" parent="."]
+position = Vector2(164, 8)
 script = ExtResource("5_gnxqn")
 
 [node name="Sprite2D" type="Sprite2D" parent="WALLOFDEATH"]
@@ -143,9 +159,10 @@ scale = Vector2(1, 4.245)
 texture = ExtResource("2_vl1qh")
 
 [node name="Camera2D" type="Camera2D" parent="WALLOFDEATH"]
-position = Vector2(550, 324.5)
+position = Vector2(548, 331)
 scale = Vector2(1, 4.245)
 offset = Vector2(29.67, 0)
+zoom = Vector2(2, 2)
 script = ExtResource("6_iaqfd")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="WALLOFDEATH"]
@@ -167,7 +184,15 @@ unreliable_sync_vars = {
 NodePath(".."): ["global_position"]
 }
 
+[node name="StaticBody2D" type="StaticBody2D" parent="WALLOFDEATH"]
+position = Vector2(90, -1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WALLOFDEATH/StaticBody2D"]
+position = Vector2(0, 248.5)
+shape = SubResource("RectangleShape2D_pa4d7")
+
 [connection signal="button_down" from="Control/Leave Button" to="." method="_on_leave_button_button_down"]
+[connection signal="button_down" from="Control/Lobby Button" to="." method="_on_lobby_button_button_down"]
 [connection signal="body_entered" from="PlayerStartArea" to="PlayerStartArea" method="_on_body_entered"]
 [connection signal="body_exited" from="PlayerStartArea" to="PlayerStartArea" method="_on_body_exited"]
 [connection signal="body_entered" from="FINISHLine" to="FINISHLine" method="_on_body_entered"]

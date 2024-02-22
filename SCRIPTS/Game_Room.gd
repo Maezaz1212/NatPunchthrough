@@ -4,6 +4,7 @@ extends Node2D
 @export var WALLOFDEATH : Node2D
 @export var DOOR : Node2D
 @export var Game_message : RichTextLabel
+@export var LobbyButton : Button
 var players_in_start_box := 0
 var race_started =false
 var game_started = true
@@ -13,7 +14,7 @@ func _ready():
 	if !Relayconnect.IS_HOST:
 		return
 
-
+	LobbyButton.disabled = false
 	var i = 0
 	
 	for puppet_master in get_tree().get_nodes_in_group("in_game"):
@@ -21,6 +22,8 @@ func _ready():
 		var network_node = player.get_node("NetworkVarSync")
 		network_node.owner_id = puppet_master.network_node.owner_id
 		i += 2
+		
+
 func _process(delta):
 	if !Relayconnect.IS_HOST:
 		set_process(false)
@@ -42,6 +45,7 @@ func start_race_game():
 	
 	
 func end_race_game(end_message : String):
+	race_started = false
 	WALLOFDEATH.velocity = Vector2.ZERO
 	Game_message.text = end_message
 	await get_tree().create_timer(5.0).timeout
@@ -53,4 +57,8 @@ func end_race_game(end_message : String):
 func _on_leave_button_button_down():
 	Relayconnect.leave_command.rpc_id(0)
 
+
+func _on_lobby_button_button_down():
+	if Relayconnect.IS_HOST:
+		Relayconnect.call_rpc_room(GameManager.change_scene_rpc,["res://SCENES/LOBBY/Multiplayer_Lobby.tscn",false])
 

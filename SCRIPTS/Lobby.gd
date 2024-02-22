@@ -12,7 +12,8 @@ func _ready():
 	Relayconnect.HOST_FAIL.connect(_on_host_fail)
 	Relayconnect.ON_RELAY_SERVER_FAIL.connect(_on_relay_server_fail)
 	Relayconnect.ON_RELAY_SERVER_CONNECT.connect(_on_relay_server_connect)
-
+	if Relayconnect.connected:
+		_on_relay_server_connect()
 
 
 	
@@ -20,13 +21,14 @@ func _on_host_success():
 	Relayconnect.call_rpc_room(GameManager.change_scene_rpc,["res://SCENES/LOBBY/Multiplayer_Lobby.tscn",true])
 
 func _on_host_fail():
+	MessageLabel.text = "HOST FAILED"
 	print("HOST FAIL")
 
 func _on_join_success():
 	print("JOIN SUCCESS")
 
 func _on_join_fail(error_message):
-	print(error_message)
+	MessageLabel.text = "JOIN FAILED : %s" %error_message
 	print("JOIN FAIL")
 
 func _on_relay_server_connect():

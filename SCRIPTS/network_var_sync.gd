@@ -19,7 +19,7 @@ func onSyncIdChange(new_sync_id):
 @export var owner_id = 0 : set  = onOwnerIdChange
 func onOwnerIdChange(new_id):
 	owner_id = new_id
-	
+	print("OWNER_ID CHANGE")
 	if owner_id == multiplayer.get_unique_id():
 		is_local_player = true
 	else:
@@ -41,7 +41,7 @@ var prior_value_dictionary_server : Dictionary
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	parent = get_parent()
-	always_server_sync_vars["."] = ["owner_id"]
+	reliable_sync_vars["."] = ["owner_id"]
 	var i = 0;
 	for key in reliable_sync_vars:
 		node_array.append(get_node(key))
@@ -140,11 +140,14 @@ func _process(delta):
 		
 @rpc("any_peer","call_remote","reliable")
 func on_spawn_sync():
+	
 	var sender_id = multiplayer.get_remote_sender_id()
 	if sender_id == 0:
+		print("SHOULD NOT BE HERE")
 		sender_id = multiplayer.get_unique_id()
+	
 	reliable_sync.rpc_id(sender_id,prior_value_dictionary_reliable)
-	reliable_sync.rpc_id(sender_id,[prior_value_dictionary_server])
+	reliable_sync.rpc_id(sender_id,prior_value_dictionary_server)
 	unreliable_sync.rpc_id(sender_id,prior_value_dictionary_unreliable)
 	
 
@@ -154,7 +157,8 @@ func reliable_sync(sync_dict : Dictionary):
 	for key in sync_dict:
 		for variable in sync_dict[key]:
 			var node = node_array[key]
-			node.set(variable,sync_dict[key][variable])
+			if node.get(variable) != sync_dict[key][variable]:
+				node.set(variable,sync_dict[key][variable])
 
 
 @rpc("any_peer","call_remote","unreliable_ordered")
@@ -167,6 +171,7 @@ func unreliable_sync(sync_dict : Dictionary):
 					if node.get(variable).distance_to(sync_dict[key][variable]) > 50:
 						node.set(variable,sync_dict[key][variable])
 				_:
-					node.set(variable,sync_dict[key][variable])
+					if node.get(variable) != sync_dict[key][variable]:
+						node.set(variable,sync_dict[key][variable])
 	
 

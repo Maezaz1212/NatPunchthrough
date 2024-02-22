@@ -87,6 +87,7 @@ func is_dead_changed(dead : bool):
 		show()
 		get_node("CollisionShape2D").set_deferred("disabled",false)
 	is_dead = dead
+	
 		
 func onPlayerNameChanged(new_player_name):
 	NameLabel.text = "[center]%s[/center]" %new_player_name

@@ -122,7 +122,7 @@ func _input(event : InputEvent):
 @rpc("any_peer","call_local","reliable")
 func ButtonSignalCall(signalName):
 	if get_child_count() < 2 && Relayconnect.IS_HOST:
-		GameManager.SPAWN_PUPPET_SIGNAL.emit(self,multiplayer.get_remote_sender_id())
+		GameManager.SPAWN_PUPPET_SIGNAL.emit(self)
 		
 		return
 		

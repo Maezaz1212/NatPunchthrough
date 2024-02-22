@@ -2,6 +2,8 @@ extends Control
 
 @export var lineEdit : LineEdit
 @export var alphabet_grid : FlowContainer
+@export var colour_grid : FlowContainer
+@export var disconnect_button : Button
 @export var TYPE_HERE_LABEL : RichTextLabel
 @export var controller := false
 var controller_id := 0
@@ -16,11 +18,19 @@ func _ready():
 	puppet_master = get_parent()
 	controller_id = puppet_master.device_id
 	controller = puppet_master.controller
+	lineEdit.text = puppet_master.player_name
+	$NetworkVarSync.owner_id = puppet_master.network_node.owner_id
 	puppet_master.add_to_group("in_game")
 	
 	if !controller:
 		for child in alphabet_grid.get_children():
 			child.queue_free()
+		for child in colour_grid.get_children():
+			child.disabled = false
+			child.button_mask = MOUSE_BUTTON_MASK_LEFT
+		
+		disconnect_button.disabled = false
+		disconnect_button.button_mask = MOUSE_BUTTON_MASK_LEFT
 		TYPE_HERE_LABEL.text = "TYPE HERE ^ ^ ^"
 	
 	if !puppet_master.network_node.is_local_player:
@@ -55,10 +65,14 @@ func _input(event):
 	
 func buttonPressed():
 	match selected_button.text:
+		"A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R",\
+		"S","T","U","V","W","X","Y","Z":
+			lineEdit.text += selected_button.text
 		"BACK":
 			lineEdit.text = lineEdit.text.left(lineEdit.text.length() - 1)
 		_:
-			lineEdit.text += selected_button.text
+
+			selected_button.button_down.emit()
 			
 func onSelectedButtonChanged(new_button):
 	if controller:
@@ -72,3 +86,9 @@ func onSelectedButtonChanged(new_button):
 func _on_line_edit_text_changed(new_text):
 	print("NewText")
 	puppet_master.player_name = new_text
+
+
+func _on_disconnect_button_button_down():
+	puppet_master.remove_from_group("in_game")
+	queue_free()
+	pass # Replace with function body.

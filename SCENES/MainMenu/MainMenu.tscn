@@ -21,10 +21,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -22.5
-offset_top = 55.0
-offset_right = 28.5
-offset_bottom = 86.0
+offset_left = 49.5
+offset_top = -68.0
+offset_right = 100.5
+offset_bottom = -37.0
 grow_horizontal = 2
 grow_vertical = 2
 disabled = true
@@ -37,10 +37,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -15.5
-offset_top = 97.5
-offset_right = 27.5
-offset_bottom = 128.5
+offset_left = 56.5
+offset_top = -25.5
+offset_right = 99.5
+offset_bottom = 5.5
 grow_horizontal = 2
 grow_vertical = 2
 disabled = true
@@ -53,20 +53,24 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -23.5
-offset_top = 145.0
-offset_right = 43.5625
-offset_bottom = 176.0
+offset_left = 48.5
+offset_top = 22.0
+offset_right = 115.563
+offset_bottom = 53.0
 grow_horizontal = 2
 grow_vertical = 2
 
 [node name="RichTextLabel" type="RichTextLabel" parent="Control"]
 layout_mode = 0
-offset_left = 399.0
-offset_top = 198.0
-offset_right = 740.0
-offset_bottom = 238.0
+offset_left = 384.0
+offset_top = 53.0
+offset_right = 725.0
+offset_bottom = 93.0
 text = "CONNECTING"
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(648, 359)
+zoom = Vector2(1.5, 1.5)
 
 [connection signal="button_down" from="Control/HOST" to="." method="_on_host_button_down"]
 [connection signal="button_down" from="Control/JOIN" to="." method="_on_join_button_down"]

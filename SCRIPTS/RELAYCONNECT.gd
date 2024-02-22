@@ -10,6 +10,7 @@ signal ON_RELAY_SERVER_FAIL()
 signal ON_RELAY_SERVER_DISCONNECT()
 
 signal NETWORK_TICK(unix_time)
+var connected = false
 var network_ticking_started := false
 @export var typed_room_code= ""
 var ROOM_DATA := {}
@@ -44,13 +45,16 @@ func NetworkTicker():
 	
 func _on_connected_to_server():
 	_resgister_player.rpc_id(0)
+	connected = true
 	ON_RELAY_SERVER_CONNECT.emit()
 
 func _on_connected_fail():
+	connected = false
 	ON_RELAY_SERVER_FAIL.emit()
 
 func _on_server_disconnected():
-	GameManager.change_scene_rpc("res://SCENES/LOBBY/Lobby.tscn",true)
+	connected = false
+	GameManager.change_scene_rpc("res://SCENES/MainMenu/MainMenu.tscn",true)
 	ROOM_DATA = {}
 	ROOM_CODE = ""
 	IS_HOST = false
@@ -130,7 +134,7 @@ func room_closed():
 		child.queue_free()
 	IS_HOST = false
 	HOST_ID = 0
-	get_tree().change_scene_to_file("res://SCENES/LOBBY/Lobby.tscn")
+	get_tree().change_scene_to_file("res://SCENES/MainMenu/MainMenu.tscn")
 
 @rpc("any_peer","call_remote","reliable")
 func _resgister_player():
