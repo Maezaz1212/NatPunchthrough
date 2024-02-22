@@ -95,8 +95,12 @@ func _on_line_edit_text_changed(new_text):
 	puppet_master.player_name = new_text
 
 
-func _on_disconnect_button_button_down():
+@rpc("any_peer","call_local","reliable") 
+func disconnect_cmd():
 	puppet_master.remove_from_group("in_game")
 	multiplayer_lobby.positions_taken.erase(lobby_grid_pos)
 	queue_free()
+
+func _on_disconnect_button_button_down():
+	disconnect_cmd.rpc_id(Relayconnect.HOST_ID)
 	pass # Replace with function body.
