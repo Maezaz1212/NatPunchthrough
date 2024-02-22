@@ -102,4 +102,3 @@ func _notification(what):
 	match what:
 		NOTIFICATION_PREDELETE:
 			puppet_master.remove_from_group("in_game")
-			get_tree().root.get_node("MultiplayerLobby").positions_taken.erase(lobby_grid_pos)
