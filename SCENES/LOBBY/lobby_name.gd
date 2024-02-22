@@ -36,6 +36,11 @@ func _ready():
 	if !puppet_master.network_node.is_local_player:
 		for child in alphabet_grid.get_children():
 			child.queue_free()
+		
+		for child in colour_grid.get_children():
+			child.queue_free()
+		
+		disconnect_button.queue_free()
 		TYPE_HERE_LABEL.text = "REMOTE PLAYER"
 		lineEdit.editable = false
 		set_process_input(false)
